@@ -3,7 +3,9 @@ import mercadopago from '@mercadopago/sdk-react';
 import { InstallmentsParams,PaymentMethodsParams,CardTokenParams } from './interfaces/mercadopago-sdk';
 
 // Inicializa o MercadoPago SDK com a chave pública
-mercadopago.initMercadoPago(process.env.PUBLIC_SDK_MERCADO_PAGO_KEY);
+const key = process.env.PUBLIC_SDK_MERCADO_PAGO_KEY as string;
+
+mercadopago.initMercadoPago(key);
 
 
 // Função para carregar opções de parcelamento
