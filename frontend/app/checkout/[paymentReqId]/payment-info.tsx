@@ -25,11 +25,6 @@ type Props = {
   paymentInfo: IPaymentRequiredDataResponse;
 };
 
-interface ParcelType {
-  id: number;
-  description: string;
-}
-
 interface ICard {
   cardNumber: string;
   cardHolder: string;
@@ -41,6 +36,7 @@ interface ICard {
 export default function PaymentInformationCard({paymentInfo}: Props) {
 
   const [installments, setInstallments] = React.useState<PayerCost[]>([]);
+  const [selectedParcel, setSelectedParcel] = React.useState<string>();
   const [email , setEmail] = React.useState<string>('');
   const [documentType, setDocumentType] = React.useState<string>('');
   const [documentNumber, setDocumentNumber] = React.useState<string>('');
@@ -62,6 +58,13 @@ export default function PaymentInformationCard({paymentInfo}: Props) {
     }
     getParcels();
   },[amount]);
+
+  const onParcelChange = (value: string) => {
+    alert("Selected Installment:" + value);
+    setSelectedParcel(value);
+    // const parcel = installments.find(parcel => parcel.installments === parseInt(value));
+    // setSelectedParcel(parcel?.recommended_message);
+  }
   
   return (
     <div className="w-full flex flex-wrap gap-4">
@@ -96,10 +99,17 @@ export default function PaymentInformationCard({paymentInfo}: Props) {
           <Input placeholder="Mês de expiração" pattern="[0-9]{2}" value={card.expirationMonth} onChange={(e) => setCard({...card, expirationMonth: e.target.value})} />
           <Input placeholder="Ano de expiração" pattern="[0-9]{4}" value={card.expirationYear} onChange={(e) => setCard({...card, expirationYear: e.target.value})} />
           <Input placeholder="CVV" value={card.cvv} onChange={(e) => setCard({...card, cvv: e.target.value})} />
-          <Select placeholder="Parcelas" value={installments[0]?.installments.toString()} onChange={(e) => console.log(e.target.value)}>
+          <Select 
+              placeholder="Parcelas"
+          >
           {
               installments.map(({installments, recommended_message}) => (
-                <SelectItem key={installments} value={installments}>{installments}x de {recommended_message}</SelectItem>
+                <SelectItem 
+                    key={installments}
+                    value={recommended_message}
+                >
+                  {recommended_message}
+                </SelectItem>
               ))
           }
           </Select>
