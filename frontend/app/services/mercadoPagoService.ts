@@ -1,5 +1,5 @@
 import { initMercadoPago } from "@mercadopago/sdk-react";
-import { createCardToken } from "@mercadopago/sdk-react/coreMethods";
+import { createCardToken,getInstallments } from "@mercadopago/sdk-react/coreMethods";
 import { CardToken } from "@mercadopago/sdk-react/coreMethods/util/types";
 
 //doc: https://github.com/mercadopago/sdk-js/blob/main/API/core-methods.md#mp-instancecreatecardtokencardtokenparams
@@ -27,5 +27,14 @@ export class MercadoPagoService {
       identificationType: "DNI",
       identificationNumber: "12345678",
     });
+  }
+
+  public async GetParcels(paymentMethodId: string) {
+    const response = await getInstallments({
+      bin: "411111",
+      amount: '100',
+      paymentMethodId: paymentMethodId,
+    });
+    return response;
   }
 }

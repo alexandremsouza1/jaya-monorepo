@@ -291,99 +291,20 @@ export default function Payment({ paymentInfo, paymentReqId }: Props) {
   };
 
   return (
-    <div className="gap-6 flex flex-col md:flex-row justify-center">
-    <PaymentInformationCard paymentInfo={paymentInfo} />
-
-    <div className="w-full md:w-80 shrink-0">
-      <Card className="max-w-[500px]">
-        <CardHeader className="flex gap-3 justify-center">
-          <div className="flex flex-col">
-            <p className="text-md">Información del pago</p>
-          </div>
-        </CardHeader>
-        <Divider />
-        <CardBody className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
-          <div>
-            <Input
-              className="mb-4"
-              type="text" // Use "text" instead of "number"
-              label="Número de la tarjeta"
-              placeholder="#### #### #### ####"
-              labelPlacement="outside"
-              value={cardNumber ?? ""}
-              onChange={handleCardNumberChange}
-              maxLength={19}
-              isRequired
-              errorMessage={errors.cardNumber.join(" ")}
-              endContent={
-                <Image
-                  src={`/card-type-logos/${useCardType}.png`}
-                  alt={useCardType}
-                  width={35}
-                  height={15}
-                />
-              }
-            />
-            <Input
-              className="mb-4"
-              type="text"
-              label="Nombre que figura en la tarjeta"
-              placeholder="Tú nombre"
-              labelPlacement="outside"
-              maxLength={20}
-              value={cardHolderName}
-              onInput={handleCardHolderNameChange}
-              isRequired
-              errorMessage={errors.cardHolderName.join(" ")}
-            />
-            <div className="flex mb-8 w-full flex-wrap md:flex-nowrap mb-6 md:mb-4 gap-4">
-              <Input
-                type="month"
-                label="Fecha de expiración"
-                placeholder={new Date().toString()}
-                labelPlacement="outside"
-                value={expirationDate}
-                onInput={handleExpirationDateChange}
-                isRequired
-                errorMessage={errors.expirationDate.join(" ")}
-              />
-              <Input
-                type="password"
-                label="CVV"
-                placeholder={
-                  useCardType.toUpperCase() === "AMEX" ? "1234" : "123"
-                }
-                maxLength={useCardType.toUpperCase() === "AMEX" ? 4 : 3}
-                labelPlacement="outside"
-                value={cvv}
-                onInput={handleCVVChange}
-                isRequired
-                errorMessage={errors.cvv.join(" ")}
-              />
-            </div>
-            <RadioGroup
-              orientation="horizontal"
-              className="items-center mt-10"
-              errorMessage={errors.typeOfCard.join(" ")}
-              onValueChange={handleTypeOfCardChange}
-              defaultValue="CREDIT_CARD"
-            >
-              <Radio value="CREDIT_CARD">Crédito</Radio>
-              <Radio value="DEBIT_CARD">Débito</Radio>
-            </RadioGroup>
-            <Button
-              className="mt-6 w-full"
-              onClick={handleSubmit}
-              isLoading={loadingRequest}
-              color="success"
-              variant="shadow"
-            >
-              Pagar
-            </Button>
-          </div>
-        </CardBody>
-      </Card>
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '90vh' }}>
+      <div style={{ flex: 1 }}>
+        <PaymentInformationCard paymentInfo={paymentInfo} />
+      </div>
+      <div>
+        <Button
+          className="w-full text-white"
+          color="success"
+          variant="shadow"
+          onClick={handleSubmit}
+        >
+          Pagar
+        </Button>
+      </div>
     </div>
-  </div>
   );
 }
