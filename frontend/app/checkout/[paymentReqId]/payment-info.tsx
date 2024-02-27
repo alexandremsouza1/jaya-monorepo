@@ -44,7 +44,7 @@ export default function PaymentInformationCard({paymentInfo}: Props) {
   const [email , setEmail] = React.useState<string>('');
   const [documentType, setDocumentType] = React.useState<string>('');
   const [documentNumber, setDocumentNumber] = React.useState<string>('');
-  const [amount, setAmount] = React.useState<number>(0);
+  const [amount, setAmount] = React.useState<string>('');
   const [card , setCard] = React.useState<ICard>({
     cardNumber: '',
     cardHolder: '',
@@ -71,12 +71,12 @@ export default function PaymentInformationCard({paymentInfo}: Props) {
         </CardHeader>
         <Divider />
         <CardBody className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
-            <Input label="Email do pagador"  type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-            <Select label="Tipo de documento" value={documentType} onChange={(e) => setDocumentType(e.target.value)}>
+            <Input  placeholder="Email do pagador"  type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+            <Select placeholder="Tipo de documento" value={documentType} onChange={(e) => setDocumentType(e.target.value)}>
               <SelectItem key="cpf" value="cpf">CPF</SelectItem>
               <SelectItem key="cnpj"value="cnpj">CNPJ</SelectItem>
             </Select>
-            <Input label="Número de identificação" value={documentNumber} onChange={(e) => setDocumentNumber(e.target.value)} />
+            <Input placeholder="Número de identificação" value={documentNumber} onChange={(e) => setDocumentNumber(e.target.value)} />
         </CardBody>
       </Card>
       <Card className="flex-1">
@@ -86,17 +86,17 @@ export default function PaymentInformationCard({paymentInfo}: Props) {
         <Divider />
         <CardBody className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
         <Input
-            label="Valor do pagamento"
+            placeholder="Valor do pagamento"
             type="number"
-            value={amount.toString()}
-            onChange={(e) => setAmount(Number(e.target.value))}
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
           />
-          <Input label="Número do cartão" value={card.cardNumber} onChange={(e) => setCard({...card, cardNumber: e.target.value})} />
-          <Input label="Nome do titular" value={card.cardHolder} onChange={(e) => setCard({...card, cardHolder: e.target.value})} />
-          <Input label="Mês de expiração" pattern="[0-9]{2}" value={card.expirationMonth} onChange={(e) => setCard({...card, expirationMonth: e.target.value})} />
-          <Input label="Ano de expiração" pattern="[0-9]{4}" value={card.expirationYear} onChange={(e) => setCard({...card, expirationYear: e.target.value})} />
-          <Input label="CVV" value={card.cvv} onChange={(e) => setCard({...card, cvv: e.target.value})} />
-          <Select label="Parcelas" value={installments[0]?.installments.toString()} onChange={(e) => console.log(e.target.value)}>
+          <Input placeholder="Número do cartão" type="number" value={card.cardNumber} onChange={(e) => setCard({...card, cardNumber: e.target.value})} />
+          <Input placeholder="Nome do titular" value={card.cardHolder} onChange={(e) => setCard({...card, cardHolder: e.target.value})} />
+          <Input placeholder="Mês de expiração" pattern="[0-9]{2}" value={card.expirationMonth} onChange={(e) => setCard({...card, expirationMonth: e.target.value})} />
+          <Input placeholder="Ano de expiração" pattern="[0-9]{4}" value={card.expirationYear} onChange={(e) => setCard({...card, expirationYear: e.target.value})} />
+          <Input placeholder="CVV" value={card.cvv} onChange={(e) => setCard({...card, cvv: e.target.value})} />
+          <Select placeholder="Parcelas" value={installments[0]?.installments.toString()} onChange={(e) => console.log(e.target.value)}>
           {
               installments.map(({installments, recommended_message}) => (
                 <SelectItem key={installments} value={installments}>{installments}x de {recommended_message}</SelectItem>
