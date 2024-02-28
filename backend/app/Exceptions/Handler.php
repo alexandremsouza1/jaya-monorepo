@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Exception;
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
@@ -63,7 +64,6 @@ class Handler extends ExceptionHandler
 
     protected function handleApiException($request, Throwable $exception)
     {
-        die($exception);
         $statusCode = $this->getStatusCodeFromException($exception);
         $message = $this->getMessageFromException($exception);
 
@@ -91,7 +91,10 @@ class Handler extends ExceptionHandler
             // Exceção do Laravel
             $this->details = $exception->errors();
             return $exception->status;
-        } elseif($exception instanceof  Exception && $exception->getCode() > 0) {
+        } elseif($exception instanceof QueryException) {
+            // Exceção do Laravel
+            return Response::HTTP_INTERNAL_SERVER_ERROR;
+        }elseif($exception instanceof  Exception && $exception->getCode() > 0) {
             // Exceção do PHP
             return $exception->getCode();
         } else {

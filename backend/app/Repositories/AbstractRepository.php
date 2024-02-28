@@ -21,37 +21,25 @@ abstract class AbstractRepository implements IEntityRepository
     public function find($id)
     {
         $result = $this->model->find($id);
-        if($result) {
-            return $this->excludeSensitiveData($result);
-        }
-        return false;
+        return $result;
     }
 
     public function findByCriteria($criteria)
     {
         $result = $this->model->where($criteria)->first();
-        if($result) {
-            return $this->excludeSensitiveData($result);
-        }
-        return false;
+        return $result;
     }
 
     public function findByKey($key, $value)
     {
         $result = $this->model->where($key, $value)->first();
-        if($result) {
-            return $this->excludeSensitiveData($result);
-        }
-        return false;
+        return $result;
     }
 
     public function findByKeyOrderBy($key, $value, $orderKey, $orderValue)
     {
         $result = $this->model->where($key, $value)->orderBy($orderKey, $orderValue)->first();
-        if($result) {
-            return $this->excludeSensitiveData($result);
-        }
-        return false;
+        return $result;
     }
 
     public function findAllByKey($key, $value)
@@ -77,7 +65,7 @@ abstract class AbstractRepository implements IEntityRepository
         $id = isset($data[$key]) ? $data[$key] : null;
         $this->applyCast($data);
         if($this->model->validate($data)) {
-            $item = $this->model->updateOrCreate(
+            return $this->model->updateOrCreate(
                 [$key => $id],
                 $data
             );
@@ -85,11 +73,12 @@ abstract class AbstractRepository implements IEntityRepository
         return false;
     }
 
-    public function save($data)
+    public function save($data) : Model
     {
         $this->applyCast($data);
         if($this->model->validate($data)) {
             $this->model->save();
+            return $this->model;
         }
         return false;
     }

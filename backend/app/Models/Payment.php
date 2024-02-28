@@ -49,10 +49,10 @@ class Payment extends BaseModel
 
 
     //get notification_url
-    // public function getNotificationUrlAttribute($value)
-    // {
-    //     return env('NOTIFICATION_URL');
-    // }
+    public function getNotificationUrlAttribute($value)
+    {
+        return env('NOTIFICATION_URL');
+    }
 
     //set notification_url
     public function setNotificationUrlAttribute($value)

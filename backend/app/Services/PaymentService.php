@@ -24,7 +24,8 @@ class PaymentService extends AbstractService
   public function create($data)
   {
     $data = $this->paymentDto->build($data);
-    return $this->paymentRepository->store($data);
+    $payment = $this->paymentRepository->save($data);
+    return ['id' => $data['id'], 'created_at' => $payment->created_at];
   }
 
   public function getAll()

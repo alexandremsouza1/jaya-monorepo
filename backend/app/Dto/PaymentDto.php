@@ -13,7 +13,7 @@ class PaymentDto implements DtoInterface
     {
       try {
         $data = [
-          'id' => Str::uuid(),
+          'id' => Str::uuid()->toString(),
           'transaction_amount' => $payload['transaction_amount'],
           'installments' => $payload['installments'],
           'token' => $payload['token'],
@@ -21,6 +21,7 @@ class PaymentDto implements DtoInterface
           'payer_email' => $payload['payer']['email'],
           'payer_identification_type' => $payload['payer']['identification']['type'],
           'payer_identification_number' => $payload['payer']['identification']['number'],
+          'notification_url' => isset($payload['notification_url']) ? $payload['notification_url'] : env('NOTIFICATION_URL'),
         ];
       } catch (\Exception $e) {
         return [];

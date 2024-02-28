@@ -26,9 +26,7 @@ class PaymentsController extends DefaultApiController
 
         $statusCode = 201;
 
-        $messageText = 'Payment created successfully';
-
-        return response()->json(['data' => $result, 'message' => $messageText, 'status' => true], $statusCode);
+        return response()->json($result, $statusCode);
     }
 
     public function getPayments(Request $request)
