@@ -3,13 +3,14 @@
 
 namespace App\Dto;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Str;
 
 
 class PaymentDto implements DtoInterface
 {
 
-    public function build($payload) : array
+    public function build(array $payload) : array
     {
       try {
         $data = [
@@ -27,5 +28,37 @@ class PaymentDto implements DtoInterface
         return [];
       }
       return $data;
+    }
+
+    public function transform(Collection $payload) : array
+    {
+      $result = [];
+
+      foreach ($payload as $key => $payment) {
+        $result[] = $this->appendPayer($payment);
+      }
+      return $result;
+    }
+
+    private function appendPayer($payment) : array
+    {
+      return [
+        'id' => $payment->id,
+        'status' => $payment->status,
+        'transaction_amount' => $payment->transaction_amount,
+        'installments' => $payment->installments,
+        'token' => $payment->token,
+        'payment_method_id' => $payment->payment_method_id,
+        'payer' => [
+            'entity_type' => $payment->payer_entity_type,
+            'type' => $payment->payer_type,
+            'email' => $payment->payer_email,
+            'identification' => $payment->payer_identification_type,
+            'number' => $payment->payer_identification_number
+        ],
+        'notification_url' => $payment->notification_url,
+        'created_at' => $payment->created_at,
+        'updated-at' => $payment->updated_at
+      ];
     }
 }

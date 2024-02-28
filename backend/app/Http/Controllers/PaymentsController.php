@@ -29,15 +29,13 @@ class PaymentsController extends DefaultApiController
         return response()->json($result, $statusCode);
     }
 
-    public function getPayments(Request $request)
+    public function getPayments()
     {
         $result = $this->paymentService->getAll();
 
         $statusCode = 200;
 
-        $messageText = 'Payments retrieved successfully';
-
-        return response()->json(['data' => $result, 'message' => $messageText, 'status' => true], $statusCode);
+        return response()->json($result, $statusCode);
     }
 
     public function getPayment(Request $request, $id)

@@ -30,7 +30,8 @@ class PaymentService extends AbstractService
 
   public function getAll()
   {
-    return $this->paymentRepository->all();
+    $data = $this->paymentRepository->all();
+    return $this->paymentDto->transform($data);
   }
 
   public function get($id)

@@ -15,9 +15,10 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->integer('transaction_amount');
-            $table->float('installments');
+            $table->float('transaction_amount');
+            $table->integer('installments');
             $table->string('token');
+            $table->string('payment_method_id');
             $table->string('payer_entity_type')->default("individual");
             $table->string('payer_type')->default("customer");
             $table->string('payer_email');

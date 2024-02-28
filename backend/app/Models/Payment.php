@@ -12,6 +12,9 @@ class Payment extends BaseModel
      */
     protected $table = 'payments';
 
+    protected $casts = [
+      'id' => 'string',
+    ];
     /**
      * The attributes that are mass assignable.
      *
@@ -22,6 +25,7 @@ class Payment extends BaseModel
         'transaction_amount',
         'installments',
         'token',
+        'payment_method_id',
         'payer_entity_type',
         'payer_type',
         'payer_email',
@@ -37,6 +41,7 @@ class Payment extends BaseModel
         'transaction_amount' => 'required|numeric',
         'installments' => 'required|integer',
         'token' => 'required|string',
+        'payment_method_id' => 'required|string',
         'payer_entity_type' => 'string',
         'payer_type' => 'string',
         'payer_email' => 'required|email',
@@ -47,16 +52,4 @@ class Payment extends BaseModel
       ];
     }
 
-
-    //get notification_url
-    public function getNotificationUrlAttribute($value)
-    {
-        return env('NOTIFICATION_URL');
-    }
-
-    //set notification_url
-    public function setNotificationUrlAttribute($value)
-    {
-        $this->attributes['notification_url'] = env('NOTIFICATION_URL');
-    }
 }
