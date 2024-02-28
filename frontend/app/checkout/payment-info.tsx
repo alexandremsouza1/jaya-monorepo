@@ -62,7 +62,9 @@ export default function PaymentInformationCard() {
         card.cardHolder,
         card.cvv,
         card.expirationMonth,
-        card.expirationYear
+        card.expirationYear,
+        documentType,
+        documentNumber
       );
     } catch (err) {
       toast({"type": "error", "message": "Erro ao gerar o token do cartão."});

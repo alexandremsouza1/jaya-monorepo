@@ -7,7 +7,7 @@ export class MercadoPagoService {
   publicKey: string;
 
   constructor() {
-    this.publicKey = process.env.NEXT_PUBLIC_MERCADO_PAGO_PUBLIC_KEY || '';
+    this.publicKey = process.env.NEXT_PUBLIC_SDK_MERCADO_PAGO_KEY || '';
     initMercadoPago(this.publicKey);
   }
 
@@ -16,7 +16,9 @@ export class MercadoPagoService {
     cardName: string,
     cvv: string,
     cardExpirationMonth: string,
-    cardExpirationYear: string
+    cardExpirationYear: string,
+    identificationType : string,
+    identificationNumber : string
   ): Promise<CardToken | undefined> {
     return await createCardToken({
       cardNumber: cardNumber,
@@ -24,8 +26,8 @@ export class MercadoPagoService {
       cardExpirationMonth: cardExpirationMonth,
       cardExpirationYear: cardExpirationYear,
       securityCode: cvv,
-      identificationType: "DNI",
-      identificationNumber: "12345678",
+      identificationType: identificationType.toUpperCase(),
+      identificationNumber: identificationNumber,
     });
   }
 
