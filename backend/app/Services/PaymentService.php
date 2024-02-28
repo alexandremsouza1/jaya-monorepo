@@ -30,13 +30,18 @@ class PaymentService extends AbstractService
 
   public function getAll()
   {
+    $result = [];
     $data = $this->paymentRepository->all();
-    return $this->paymentDto->transform($data);
+    foreach ($data as $item) {
+      $result[] = $this->paymentDto->transform($item);
+    }
+    return $result;
   }
 
   public function get($id)
   {
-    return $this->paymentRepository->find($id);
+    $data = $this->paymentRepository->find($id);
+    return $this->paymentDto->transform($data);
   }
 
   public function confirm($id)

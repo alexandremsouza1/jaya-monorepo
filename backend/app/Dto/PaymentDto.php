@@ -3,6 +3,7 @@
 
 namespace App\Dto;
 
+use App\Models\Payment;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Str;
 
@@ -30,14 +31,9 @@ class PaymentDto implements DtoInterface
       return $data;
     }
 
-    public function transform(Collection $payload) : array
+    public function transform($payload) : array
     {
-      $result = [];
-
-      foreach ($payload as $key => $payment) {
-        $result[] = $this->appendPayer($payment);
-      }
-      return $result;
+      return $this->appendPayer($payload);
     }
 
     private function appendPayer($payment) : array

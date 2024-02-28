@@ -3,9 +3,6 @@
 
 namespace App\Dto;
 
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
-
 interface DtoInterface
 {
     /**
@@ -14,8 +11,8 @@ interface DtoInterface
      */
     public function build(array $payload): array;
     /**
-     * @param Collection $payload
+     * @param Model $payload
      * @return array
      */
-    public function transform(Collection $payload): array;
+    public function transform($payload): array;
 }
