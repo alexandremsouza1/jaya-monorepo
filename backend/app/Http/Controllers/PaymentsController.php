@@ -49,23 +49,23 @@ class PaymentsController extends DefaultApiController
 
     public function confirmPayment(Request $request, $id)
     {
-        $result = $this->paymentService->confirm($id);
+        $data = $request->all();
 
-        $statusCode = 200;
+        $result = $this->paymentService->changeStatus($id, $data);
 
-        $messageText = 'Payment confirmed successfully';
+        $statusCode = $result ? 204 : 404;
 
-        return response()->json(['data' => $result, 'message' => $messageText, 'status' => true], $statusCode);
+        return response()->json([], $statusCode);
     }
 
-    public function cancelPayment(Request $request, $id)
+    public function cancelPayment($id)
     {
-        $result = $this->paymentService->cancel($id);
+        $data = ['status' => 'CANCELED'];
+        
+        $result = $this->paymentService->changeStatus($id, $data);
 
-        $statusCode = 200;
+        $statusCode = $result ? 204 : 404;
 
-        $messageText = 'Payment canceled successfully';
-
-        return response()->json(['data' => $result, 'message' => $messageText, 'status' => true], $statusCode);
+        return response()->json([], $statusCode);
     }
 }

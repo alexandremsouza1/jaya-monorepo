@@ -44,24 +44,15 @@ class PaymentService extends AbstractService
     return $this->paymentDto->transform($data);
   }
 
-  public function confirm($id)
+  public function changeStatus($id,$params) : bool
   {
-    $data = $this->get($id);
+    $data = $this->paymentRepository->find($id);
     if ($data) {
-      $data['status'] = 'PAID';
-      return $this->paymentRepository->update($id, $data);
+      $data['status'] = $params['status'];
+      return $this->paymentRepository->update($id, $data->toArray());
     }
     return false;
   }
 
-  public function cancel($id)
-  {
-    $data = $this->get($id);
-    if ($data) {
-      $data['status'] = 'CANCELED';
-      return $this->paymentRepository->update($id, $data);
-    }
-    return false;
-  }
 
 }
