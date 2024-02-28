@@ -1,34 +1,28 @@
-FROM php:8.2.8-fpm
+FROM php:8.2-fpm
 
-# Update and install dependencies
-RUN apt-get update && apt-get install -y \
-	libssl-dev \
-    libcurl4-openssl-dev \
-    pkg-config \
-    wget \
-    git \
-    zip \
-    unzip \
-&& rm -rf /var/lib/apt/lists/*
 
-# Install and enable Xdebug
-RUN pecl install xdebug \
-&& docker-php-ext-enable xdebug
+ENV COMPOSER_ALLOW_SUPERUSER 1
 
-# Install and enable Redis extension
-RUN pecl install redis \
-&& docker-php-ext-enable redis
 
-# Install and enable pcntl extension
-RUN docker-php-ext-install pcntl
+# Install composer
+RUN curl -sSL https://getcomposer.org/installer | php \
+    && chmod +x composer.phar \
+    && mv composer.phar /usr/local/bin/composer
 
-# Install and enable PDO MySQL extension
+
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 RUN docker-php-ext-install pdo_mysql
+RUN apt-get update && apt-get install -y git zip unzip libcurl4-openssl-dev pkg-config libssl-dev libgd-dev
 
-# Install Composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Copiar arquivo de configuração
-COPY php.ini /usr/local/etc/php/php.ini
 
-WORKDIR /var/www
+COPY ./dockerfiles/xdebug.ini $PHP_INI_DIR/conf.d/
+RUN pecl install xdebug
+RUN docker-php-ext-enable xdebug
+
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+EXPOSE 8000
+
+CMD ["/entrypoint.sh"]

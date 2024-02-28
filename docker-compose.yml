@@ -15,43 +15,19 @@ services:
 #     depends_on:
 #       - api
 
-#   api:
-#     build:
-#       context: back_end
-#       dockerfile: dockerfiles/Dockerfile
-#     volumes:
-#       - ./back_end:/var/www/html
-#     depends_on:
-#       - db
-#     networks:
-#       - my_network
+    api:
+        build:
+            context: ./backend
+            dockerfile: dockerfiles/php-fpm/Dockerfile
+        volumes:
+        - ./backend:/var/www/html
+        ports:
+            - 8000:8000
+        depends_on:
+        - db
+        networks:
+        - my_network
 
-#   app:
-#     build:
-#       context: front_end
-#       dockerfile: dockerfiles/Dockerfile
-#       target: test-target
-#       args:
-#         npm_install_command: install
-#     ports:
-#       - 3000:3000
-#       - 9229:9229
-#     command: npm run dev
-#     volumes:
-#       - ./front_end/app:/usr/src/app:delegated
-#     networks:
-#       - my_network
-    # app:
-    #     build:
-    #         context: front_end
-    #         dockerfile: dockerfiles/Dockerfile
-    #     volumes:
-    #         - ./front_end/app:/code/src/
-    #         - ./front_end/app/public:/code/public/
-    #     ports:
-    #         - 3000:3000
-    #     networks:
-    #         - my_network
     app:
         build:
             context: ./frontend/
@@ -65,7 +41,7 @@ services:
     db:
         image: mysql:8.0
         ports:
-        - "3301-3399:3306"
+        - "3301-3309:3306"
         command: --default-authentication-plugin=mysql_native_password
         environment:
             MYSQL_DATABASE: payments
@@ -73,7 +49,7 @@ services:
             MYSQL_PASSWORD: password
             MYSQL_ROOT_PASSWORD: secret
         volumes:
-        - ./back_end/dockerfiles/mysql:/etc/mysql/conf.d
+        - ./backend/dockerfiles/mysql:/etc/mysql/conf.d
         - my_volume:/var/lib/mysql
         networks:
         - my_network
