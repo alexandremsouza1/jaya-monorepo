@@ -6,9 +6,9 @@ import { CardToken } from "@mercadopago/sdk-react/coreMethods/util/types";
 export class MercadoPagoService {
   publicKey: string;
 
-  constructor(publicKey: string) {
-    this.publicKey = publicKey;
-    initMercadoPago(publicKey);
+  constructor() {
+    this.publicKey = process.env.NEXT_PUBLIC_MERCADO_PAGO_PUBLIC_KEY || '';
+    initMercadoPago(this.publicKey);
   }
 
   public async MercadoPagoCardToken(
@@ -29,12 +29,16 @@ export class MercadoPagoService {
     });
   }
 
-  public async GetParcels(paymentMethodId: string) {
+  public async GetParcels(paymentMethodId: string, amount: string , cardNumber:string) {
     const response = await getInstallments({
-      bin: "411111",
-      amount: '100',
+      bin: this.getBin(cardNumber),
+      amount: amount,
       paymentMethodId: paymentMethodId,
     });
     return response;
+  }
+
+  private getBin(cardNumber: string) : string {
+    return cardNumber.substring(0, 6);
   }
 }

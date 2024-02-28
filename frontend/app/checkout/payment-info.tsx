@@ -1,73 +1,104 @@
-import React,{useEffect} from "react";
+import React,{ useEffect,useState } from "react";
 import * as MP from "@/app/services/mercadoPagoService";
 
-import { IPaymentRequiredDataResponse } from "@/src/api/types";
+import { IPaymentRunRequest,ICard } from "@/src/api/types";
 import {PayerCost} from "@mercadopago/sdk-react/coreMethods/util/types";
+import { useRunPayment } from "@/src/api/checkout";
 import {
-  Badge,
   Card,
   CardBody,
   CardHeader,
   Divider,
-  Image,
-  Table,
-  TableBody,
-  TableCell,
-  TableColumn,
-  TableHeader,
-  TableRow,
+  Button,
   Input,
   Select,
-  SelectItem
+  SelectItem,
+  Spinner,
 } from "@nextui-org/react";
+import toast from "@/components/toast";
 
-type Props = {
-  paymentInfo: IPaymentRequiredDataResponse;
-};
 
-interface ICard {
-  cardNumber: string;
-  cardHolder: string;
-  expirationMonth: string;
-  expirationYear: string;
-  cvv: string;
-}
 
-export default function PaymentInformationCard({paymentInfo}: Props) {
+export default function PaymentInformationCard() {
 
-  const [installments, setInstallments] = React.useState<PayerCost[]>([]);
-  const [selectedParcel, setSelectedParcel] = React.useState<string>();
-  const [email , setEmail] = React.useState<string>('');
-  const [documentType, setDocumentType] = React.useState<string>('');
-  const [documentNumber, setDocumentNumber] = React.useState<string>('');
-  const [amount, setAmount] = React.useState<string>('');
-  const [card , setCard] = React.useState<ICard>({
+  const [installments, setInstallments] = useState<PayerCost[]>([]);
+  const [selectedParcel, setSelectedParcel] = useState<string>('');
+  const [email , setEmail] = useState<string>('');
+  const [documentType, setDocumentType] = useState<string>('');
+  const [documentNumber, setDocumentNumber] = useState<string>('');
+  const [amount, setAmount] = useState<string>('');
+  const [card , setCard] = useState<ICard>({
     cardNumber: '',
     cardHolder: '',
     expirationMonth: '',
     expirationYear: '',
     cvv: ''
   });
+  const [loadingRequest, setLoadingRequest] = useState(false);
 
+  const { doRunPayment, error: paymentError } = useRunPayment();
   useEffect(() => {
     const getParcels = async () => {
-      const mercadoPagoService: MP.MercadoPagoService = new MP.MercadoPagoService('TEST-7edc1fe6-c838-4c60-a86c-c05a3c3f1df7');
-      let installments = await mercadoPagoService.GetParcels('1');
+      const mercadoPagoService: MP.MercadoPagoService = new MP.MercadoPagoService();
+      let installments = await mercadoPagoService.GetParcels('master', amount, card.cardNumber);
       if(installments && typeof installments[0] !== 'undefined')
         setInstallments(installments[0].payer_costs);
     }
     getParcels();
   },[amount]);
 
-  const onParcelChange = (value: string) => {
-    alert("Selected Installment:" + value);
-    setSelectedParcel(value);
-    // const parcel = installments.find(parcel => parcel.installments === parseInt(value));
-    // setSelectedParcel(parcel?.recommended_message);
+  const handleSelectionChange = (e: any) => {
+    setSelectedParcel(e.target.value);
   }
+
+  const getMpToken = async () => {
+    let mpToken = null;
+
+    try {
+      const mercadoPagoService: MP.MercadoPagoService =
+        new MP.MercadoPagoService();
+      mpToken = await mercadoPagoService.MercadoPagoCardToken(
+        card.cardNumber,
+        card.cardHolder,
+        card.cvv,
+        card.expirationMonth,
+        card.expirationYear
+      );
+    } catch (err) {
+      toast({"type": "error", "message": "Erro ao gerar o token do cartão."});
+    }
+    return mpToken;
+  };
+
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    let cardToken = await getMpToken();
+    let payload: IPaymentRunRequest = {
+      "transaction_amount": amount,
+      "installments": selectedParcel,
+      "token": cardToken?.id,
+      "payment_method_id": "master",
+      "payer": {
+          "email": email,
+          "identification": {
+              "type": documentType,
+              "number": documentNumber
+          }
+      },
+    };
+    try {
+      await doRunPayment(payload);
+      if(paymentError){
+        toast({"type": "error", "message": "Erro ao realizar o pagamento."});
+        return;
+      }
+    } catch (err) {
+      toast({"type": "error", "message": "Erro ao realizar o pagamento."});
+    }
+  };
   
   return (
-    <div className="w-full flex flex-wrap gap-4">
+    <form className="w-full flex flex-wrap gap-4">
       <Card className="flex-1">
         <CardHeader className="flex gap-3 justify-center">
           <h1 className="text-2xl font-semibold">Dados do pagador</h1>
@@ -101,6 +132,7 @@ export default function PaymentInformationCard({paymentInfo}: Props) {
           <Input placeholder="CVV" value={card.cvv} onChange={(e) => setCard({...card, cvv: e.target.value})} />
           <Select 
               placeholder="Parcelas"
+              onChange={handleSelectionChange}
           >
           {
               installments.map(({installments, recommended_message}) => (
@@ -115,6 +147,25 @@ export default function PaymentInformationCard({paymentInfo}: Props) {
           </Select>
         </CardBody>
       </Card>
+      <div className="fixed bottom-0 left-0 right-0 p-4 bg-white">
+      {loadingRequest ? (
+        // Render the button with a spinner when loadingRequest is true
+        <Button className="w-full text-white" color="success" variant="shadow" disabled>
+          <Spinner color="white" />
+          Aguarde...
+        </Button>
+      ) : (
+        // Render the regular button when loadingRequest is false
+        <Button
+          className="w-full text-white"
+          color="success"
+          variant="shadow"
+          onClick={handleSubmit}
+        >
+          Pagar
+        </Button>
+      )}
     </div>
+    </form>
   );
 }
