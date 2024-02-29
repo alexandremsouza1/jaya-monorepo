@@ -14,6 +14,7 @@ import {
   Select,
   SelectItem,
   Spinner,
+  Tooltip,
 } from "@nextui-org/react";
 import toast from "@/components/toast";
 
@@ -45,7 +46,7 @@ export default function PaymentInformationCard() {
         setInstallments(installments[0].payer_costs);
     }
     getParcels();
-  },[amount]);
+  },[amount,card.cardNumber]);
 
   const handleSelectionChange = (e: any) => {
     setSelectedParcel(e.target.value);
@@ -136,21 +137,25 @@ export default function PaymentInformationCard() {
           <Input placeholder="Mês de expiração" pattern="[0-9]{2}" value={card.expirationMonth} onChange={(e) => setCard({...card, expirationMonth: e.target.value})} />
           <Input placeholder="Ano de expiração" pattern="[0-9]{4}" value={card.expirationYear} onChange={(e) => setCard({...card, expirationYear: e.target.value})} />
           <Input placeholder="CVV" value={card.cvv} onChange={(e) => setCard({...card, cvv: e.target.value})} />
-          <Select 
-              placeholder="Parcelas"
-              onChange={handleSelectionChange}
-          >
-          {
-              installments.map(({installments, recommended_message}) => (
-                <SelectItem 
-                    key={installments}
-                    value={recommended_message}
-                >
-                  {recommended_message}
-                </SelectItem>
-              ))
-          }
-          </Select>
+          <Tooltip content={
+            !(amount && card.cardNumber) && "É necessário preencher todos os campos para a exibição das parcelas" 
+          } placement="top" color="warning">
+            <Select 
+                placeholder="Parcelas"
+                onChange={handleSelectionChange}
+            >
+            {
+                installments.map(({installments, recommended_message}) => (
+                  <SelectItem 
+                      key={installments}
+                      value={recommended_message}
+                  >
+                    {recommended_message}
+                  </SelectItem>
+                ))
+            }
+            </Select>
+          </Tooltip>
         </CardBody>
       </Card>
       <div className="fixed bottom-0 left-0 right-0 p-4 bg-white">
