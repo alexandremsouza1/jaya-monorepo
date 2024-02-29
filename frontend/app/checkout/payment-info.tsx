@@ -89,13 +89,17 @@ export default function PaymentInformationCard() {
       },
     };
     try {
+      setLoadingRequest(true);
       await doRunPayment(payload);
       if(paymentError){
         toast({"type": "error", "message": "Erro ao realizar o pagamento."});
         return;
       }
+      toast({"type": "success", "message": "Pagamento realizado com sucesso."});
     } catch (err) {
       toast({"type": "error", "message": "Erro ao realizar o pagamento."});
+    } finally {
+      setLoadingRequest(false);
     }
   };
   

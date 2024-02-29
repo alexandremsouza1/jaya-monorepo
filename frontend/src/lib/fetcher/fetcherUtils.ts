@@ -81,11 +81,11 @@ export async function baseFetcher<T>(
 
   const text = await response.text();
   const data: T | ErrorResponse = text ? JSON.parse(text) : undefined;
-
+  debugger
   if (!response.ok) {
     handleRequestFailed(response, path, data as ErrorResponse);
-  } else if (response.ok && response.status === 204) {
-    return { status: 204 } as T;
+  } else if (response.ok && response.status > 200 && response.status < 300) {
+    return { status: response.status } as T;
   }
 
   return data as T;
