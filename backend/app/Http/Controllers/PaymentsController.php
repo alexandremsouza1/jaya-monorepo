@@ -23,7 +23,7 @@ class PaymentsController extends DefaultApiController
 
 
 
-/**
+    /**
      * @OA\Post(
      *     path="/rest/payments",
      *     tags={"Payments"},
@@ -216,7 +216,7 @@ class PaymentsController extends DefaultApiController
      *         )
      *     )
      * )
- */
+     */
     public function confirmPayment(Request $request, $id)
     {
         $data = $request->all();
@@ -263,7 +263,7 @@ class PaymentsController extends DefaultApiController
     public function cancelPayment($id)
     {
         $data = ['status' => 'CANCELED'];
-        
+
         $result = $this->paymentService->changeStatus($id, $data);
 
         $statusCode = $result ? 204 : 404;
