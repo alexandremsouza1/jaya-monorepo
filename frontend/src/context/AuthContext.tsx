@@ -8,6 +8,11 @@ import { ParsedUser, ShopResponse, UserResponse } from '../api/types'
 import { ME_PATH, mapUserResponseToUser, useSignIn } from '../api/users'
 import { fetcher } from '../lib/fetcher/clientFetcher'
 
+interface Props {
+  children: React.ReactNode;
+}
+
+
 type AuthContext = {
   user: ParsedUser | null
   shop: ShopResponse | null
@@ -20,7 +25,7 @@ type AuthContext = {
 
 export const AuthContext = createContext<AuthContext | null>(null)
 
-export function AuthProvider({ children }) {
+export function AuthProvider({ children } : Props) {
   const router = useRouter()
 
   const { data, mutate, isLoading, error } = useSWR<UserResponse | null>(

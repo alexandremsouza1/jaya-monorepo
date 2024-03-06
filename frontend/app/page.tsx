@@ -1,7 +1,7 @@
 
 import { getPaymentReq } from "@/src/api/server/checkout";
 import { IPaymentRequiredDataResponse } from "@/src/api/types";
-import CheckoutForm from "./checkout/[paymentReqId]/checkoutForm";
+
 
 
 

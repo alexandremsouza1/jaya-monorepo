@@ -21,7 +21,7 @@ export class FullError extends Error {
   }
 }
 
-export function getHeaders(headerParams, accessToken: string | null) {
+export function getHeaders(headerParams:any, accessToken: string | null) {
   const headers = {
     "Content-Type": "application/json",
     "Access-Control-Allow-Origin": "*",
@@ -58,9 +58,9 @@ export function handleRequestFailed(
 
 export async function baseFetcher<T>(
   path: string,
-  accessToken,
-  refreshToken,
-  env,
+  accessToken: string,
+  refreshToken: string,
+  env: string,
   options?: RequestInit
 ): Promise<T> {
   const baseURL = process.env.NEXT_PUBLIC_BASE_URL;

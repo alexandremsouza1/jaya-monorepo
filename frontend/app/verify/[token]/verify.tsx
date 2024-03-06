@@ -28,7 +28,7 @@ export default function Verify({ children, token }: Props) {
 
     useEffect(() => {
         handleSubmit();
-    }, []);
+    });
 
     return (
         <div className="gap-6 justify-center">

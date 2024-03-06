@@ -52,7 +52,7 @@ export function saveTokensFromResponse(response: Response) {
   setRefreshToken(refreshToken)
 }
 
-export async function getNewAccessToken(accessToken, refreshToken) {
+export async function getNewAccessToken(accessToken:string, refreshToken:string) {
   const url = process.env.NEXT_PUBLIC_BASE_URL + '/app/public/auth/refresh-token'
   const token = accessToken?.split('Bearer ')[1]
 
@@ -77,7 +77,7 @@ export async function getNewAccessToken(accessToken, refreshToken) {
   }
 }
 
-export async function getAccessToken(accessToken, refreshToken) {
+export async function getAccessToken(accessToken:string, refreshToken:string) {
   const isAccessExpired = isTokenExpired(accessToken)
   const isRefreshExpired = isTokenExpired(refreshToken)
 

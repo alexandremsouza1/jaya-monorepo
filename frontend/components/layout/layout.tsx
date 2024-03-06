@@ -18,28 +18,8 @@ export const LayoutComponent = ({ children }: Props) => {
   };
 
   return (
-    <Card shadow="sm" className="h-full">
-      <CardBody>
-        <Payment 
-          paymentInfo={{
-            amount: 100,
-            currency: 'USD',
-            shopId: 1,
-            products: [
-              {
-                name: 'Product 1',
-                unitPrice: 100,
-                description: 'Product 1 description',
-                imgUrl: 'https://via.placeholder.com/150',
-                quantity: 1,
-              },
-            ],
-            executed: false,
-          }}
-          paymentReqId='1234'
-        />
-      </CardBody>
-      <CardFooter></CardFooter>
-    </Card>
+    <div className="flex h-screen bg-gray-100">
+      this is layout
+    </div>
   );
 };

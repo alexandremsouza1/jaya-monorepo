@@ -34,7 +34,7 @@ export function useSignIn() {
   //     return mockUser;
   //     }
 
-  async function doSignIn(url, { arg }) {
+  async function doSignIn(url:any, { arg }:any) {
     const headers: any = {};
 
     // credentials are optional since we can get the user with the token
@@ -58,7 +58,7 @@ export function useSignIn() {
   const user = mapUserResponseToUser(data);
 
   return {
-    doSignIn: trigger,
+    doSignIn: trigger as any,
     isLoading: isMutating,
     user,
     error,
@@ -78,7 +78,7 @@ export function useSignUp() {
   );
 
   return {
-    doSignUp: trigger,
+    doSignUp: trigger as any,
     isLoading: isMutating,
     data,
     error,
@@ -93,7 +93,7 @@ export function useForgotPassword() {
   );
 
   return {
-    doForgotPassword: trigger,
+    doForgotPassword: trigger as any,
     isLoading: isMutating,
     data,
     error,
@@ -108,7 +108,7 @@ export function useResetPassword({ token }: { token: string }) {
   );
 
   return {
-    doResetPassword: trigger,
+    doResetPassword: trigger as any,
     isLoading: isMutating,
     data,
     error,
@@ -123,7 +123,7 @@ export function useVerify({ token }: { token: string }) {
   );
 
   return {
-    doVerify: trigger,
+    doVerify: trigger as any,
     isLoading: isMutating,
     data,
     error,
@@ -138,7 +138,7 @@ export function useResendVerifyEmail() {
   );
 
   return {
-    doResendVerifyEmail: trigger,
+    doResendVerifyEmail: trigger as any,
     isLoading: isMutating,
     data,
     error,
@@ -154,7 +154,7 @@ export function useChangePassword() {
   );
 
   return {
-      doChangePassword: trigger,
+      doChangePassword: trigger as any,
       isLoading: isMutating,
       data,
       error,
