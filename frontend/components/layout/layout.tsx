@@ -17,9 +17,13 @@ export const LayoutComponent = ({ children }: Props) => {
     setLocked(!sidebarOpen);
   };
 
+
   return (
-    <div className="flex h-screen bg-gray-100">
-      this is layout
-    </div>
+    <Card shadow="sm" className="h-full">
+      <CardBody>
+        <Payment />
+      </CardBody>
+      <CardFooter></CardFooter>
+    </Card>
   );
 };
